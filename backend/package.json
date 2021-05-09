@@ -1,0 +1,36 @@
+{
+  "name": "thoughtsheet",
+  "version": "0.1.0",
+  "description": "A simple cloud-synced multiplatform notes app.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "ts-node-dev --respawn src/index.ts",
+    "lint": "ts-standard",
+    "lint:fix": "ts-standard --fix",
+    "start-local-db": "echo 'You must have installed `docker` and be in the `docker` group' && docker run -d --network=host --name mongo mongo"
+  },
+  "keywords": [
+    "notes",
+    "app"
+  ],
+  "author": "xtyrrell",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "dotenv": "^9.0.1",
+    "express": "^4.17.1",
+    "express-jwt": "^6.0.0",
+    "express-promise-router": "^4.1.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.12.7"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/express-jwt": "^6.0.1",
+    "@types/jsonwebtoken": "^8.5.1",
+    "ts-node-dev": "^1.1.6",
+    "ts-standard": "^10.0.0",
+    "typescript": "^4.2.4"
+  }
+}
