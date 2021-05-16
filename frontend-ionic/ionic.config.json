@@ -1,0 +1,8 @@
+{
+  "name": "ThoughtSheet",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react",
+  "id": "8636aa7e"
+}

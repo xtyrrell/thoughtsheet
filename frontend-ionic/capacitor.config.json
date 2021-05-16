@@ -1,0 +1,13 @@
+{
+  "appId": "com.xtyrrell.thoughtsheet",
+  "appName": "ThoughtSheet",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "build",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {}
+}
