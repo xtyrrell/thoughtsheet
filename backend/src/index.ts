@@ -1,16 +1,21 @@
-import 'dotenv/config'
 import mongoose from 'mongoose'
 import app from './app'
+import requireEnvVar from './utils/env'
 
 async function main () {
-  const PORT = process.env.PORT ?? 8080
+  const PORT = requireEnvVar('PORT')
 
-  await mongoose.connect(process.env.MONGO_URL ?? 'mongodb://localhost', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false
-  })
+  try {
+    await mongoose.connect(requireEnvVar('MONGO_URL', 'mongodb://localhost'), {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+      useFindAndModify: false
+    })
+  } catch {
+    console.error(`Mongoose could not connect to MongoDB server. Exiting.`)
+    process.exit(1)
+  }
 
   // Start the express server
   app.listen(PORT, () => {
