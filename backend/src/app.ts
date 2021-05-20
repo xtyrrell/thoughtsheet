@@ -1,11 +1,14 @@
-import express from 'express'
-import router from './router'
+import express from "express";
+import cors from "cors";
+import router from "./router";
 
-const app = express()
+const app = express();
 
-app.use(express.json()) // for parsing application/json
-app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+app.use(cors({ origin: /localhost(?:\:[0-9]{1,4})?$/i, credentials: true }));
 
-app.use(router)
+app.use(express.json()); // for parsing application/json
+app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
-export default app
+app.use(router);
+
+export default app;

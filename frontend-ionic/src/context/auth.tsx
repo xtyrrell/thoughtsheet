@@ -14,7 +14,7 @@ interface AuthContextValue {
 }
 
 interface LoginDetails {
-  emailOrPhoneNumber: string;
+  email: string;
   password: string;
 }
 
@@ -30,8 +30,28 @@ export const AuthProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
 
   console.log(`AuthProvider: isAuthenticated`, isAuthenticated);
 
-  const login = ({ emailOrPhoneNumber, password }: LoginDetails) => {
+  const login = async ({ email, password }: LoginDetails) => {
     // fetch()
+    console.log(
+      `login: Logging in with email: ${email} and password: ${password}`
+    );
+
+    try {
+      const res = await fetch(`http://localhost:5000/auth/login`, {
+        method: "POST",
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // include, *same-origin, omit
+      });
+      console.log(`login: fetch res:`, res);
+    } catch (err) {
+      console.log(`login: err :`, err);
+    }
   };
 
   return (
