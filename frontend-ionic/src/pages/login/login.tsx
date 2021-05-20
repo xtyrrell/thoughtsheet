@@ -1,31 +1,55 @@
-import { IonContent, IonInput, IonItem, IonLabel, IonPage } from "@ionic/react";
-import { useState } from "react";
+import {
+  IonButton,
+  IonContent,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonPage,
+} from "@ionic/react";
+import { FormEvent, useState } from "react";
 import { useAuth } from "../../context/auth";
 
 const Login: React.FC = () => {
-  const [emailOrPhoneNumber, setEmailOrPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const { login } = useAuth();
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
     console.log("submitting!");
+
+    login({ email, password });
   };
 
   return (
     <IonPage>
-      <IonContent>
-        <h1>Login</h1>
+      <IonContent className="ion-padding">
+        <h1 className="ion-margin-bottom">Login</h1>
         <form onSubmit={handleSubmit}>
           <IonItem>
             <IonLabel position="floating">Email or phone number</IonLabel>
             <IonInput
-              type="text"
+              type="email"
               name="email"
-              placeholder="Enter your email or phone number"
-              onIonChange={(e) => setEmailOrPhoneNumber(e.detail.value!)}
-              clearInput
+              placeholder="Eg. john@example.com"
+              onIonChange={(e) => setEmail(e.detail.value!)}
+              value={email}
             />
           </IonItem>
+          <IonItem>
+            <IonLabel position="floating">Password</IonLabel>
+            <IonInput
+              type="password"
+              name="password"
+              onIonChange={(e) => setPassword(e.detail.value!)}
+              value={password}
+            />
+          </IonItem>
+
+          <IonButton className="ion-margin-top" type="submit">
+            Let's go!
+          </IonButton>
         </form>
       </IonContent>
     </IonPage>
