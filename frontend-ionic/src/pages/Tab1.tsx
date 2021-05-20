@@ -8,28 +8,42 @@ import {
 } from "@ionic/react";
 import ClownCard from "../components/ClownCard";
 import "./Tab1.css";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-const data = [
-  {
-    id: "1",
-    title: "James",
-    text: "I make kids happy for a living. Voted Torontos Best Clown 2009, runner up 2010.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1589805807273-a491fdb442ee?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=975&q=80",
-    rating: 3,
-    special: true,
-  },
-  {
-    id: "2",
-    title: "Darren",
-    text: "I make kids happy for a living. Voted Torontos Best Clown 2009, runner up 2010.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1589805807273-a491fdb442ee?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=975&q=80",
-    rating: 2,
-    special: false,
-  },
-];
+// const data = [
+//   {
+//     id: "1",
+//     title: "James",
+//     text: "I make kids happy for a living. Voted Torontos Best Clown 2009, runner up 2010.",
+//     imageUrl:
+//       "https://images.unsplash.com/photo-1589805807273-a491fdb442ee?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=975&q=80",
+//     rating: 3,
+//     special: true,
+//   },
+//   {
+//     id: "2",
+//     title: "Darren",
+//     text: "I make kids happy for a living. Voted Torontos Best Clown 2009, runner up 2010.",
+//     imageUrl:
+//       "https://images.unsplash.com/photo-1589805807273-a491fdb442ee?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=975&q=80",
+//     rating: 2,
+//     special: false,
+//   },
+// ];
+
 const Tab1: React.FC = () => {
+  const [listings, setListings] = useState([]);
+  const getAllListings = () => {
+    axios.get(`localhost:5000/listings`).then((res) => {
+      console.log(res.data);
+      setListings(res.data);
+    });
+  };
+  useEffect(() => {
+    getAllListings();
+  }, []);
+
   return (
     <IonPage>
       <IonHeader color="primary">
@@ -50,7 +64,7 @@ const Tab1: React.FC = () => {
           <h1>
             Toronto's most <span className="red">serious</span> clown community.
           </h1>
-          {data.map((clown) => {
+          {listings.map((clown) => {
             return <ClownCard clown={clown}></ClownCard>;
           })}
         </div>
