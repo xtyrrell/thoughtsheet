@@ -37,9 +37,9 @@ import { useAuth } from "./context/auth";
 import Login from "./pages/login/login";
 
 const InnerApp: React.FC = () => {
-  // const { isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
 
-  // if (!isAuthenticated) return <Login />;
+  if (!isAuthenticated) return <Login />;
 
   return (
     <IonReactRouter>
@@ -61,15 +61,15 @@ const InnerApp: React.FC = () => {
         <IonTabBar slot="bottom">
           <IonTabButton tab="tab1" href="/tab1">
             <IonIcon icon={triangle} />
-            <IonLabel>Discover</IonLabel>
+            <IonLabel>Tab 1</IonLabel>
           </IonTabButton>
           <IonTabButton tab="tab2" href="/tab2">
             <IonIcon icon={ellipse} />
-            <IonLabel>Naughty List</IonLabel>
+            <IonLabel>Tab 2</IonLabel>
           </IonTabButton>
           <IonTabButton tab="tab3" href="/tab3">
             <IonIcon icon={square} />
-            <IonLabel>Apply</IonLabel>
+            <IonLabel>Tab 3</IonLabel>
           </IonTabButton>
         </IonTabBar>
       </IonTabs>
