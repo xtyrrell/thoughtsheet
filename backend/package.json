@@ -7,7 +7,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "dev": "ts-node-dev --respawn src/index.ts",
-    "build": "tsc",
+    "build": "npx tsc",
     "start": "npm run build && node ./build/index.js",
     "lint": "ts-standard",
     "lint:fix": "ts-standard --fix",
