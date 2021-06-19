@@ -5,7 +5,8 @@ import { errorHandler } from "./middleware/errors";
 
 const router = Router();
 
-router.use("/notes", authUser, routes.notesRoutes);
+// router.use("/notes", authUser, routes.notesRoutes);
+router.use("/notes", routes.notesRoutes);
 
 router.use("/auth", routes.authRoutes);
 
