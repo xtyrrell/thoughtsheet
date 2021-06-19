@@ -1,5 +1,6 @@
 FROM node:16.3-alpine
 
+ENV ENV=production
 ENV NODE_ENV=production
 
 WORKDIR /usr/src/app
@@ -15,5 +16,5 @@ COPY . .
 
 RUN npm run build
 
-EXPOSE 3000
+EXPOSE 5000
 CMD ["npm", "start"]
