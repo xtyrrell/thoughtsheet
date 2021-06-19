@@ -8,7 +8,7 @@
     "test:watch": "jest --watch",
     "dev": "ts-node-dev --respawn src/index.ts",
     "build": "npx tsc",
-    "start": "npm i --include dev && npm run build && node ./build/index.js",
+    "start": "node ./build/index.js",
     "lint": "ts-standard",
     "lint:fix": "ts-standard --fix",
     "start-local-db": "echo 'You must have installed `docker` and be in the `docker` group' && docker run -d --network=host --name mongo mongo"

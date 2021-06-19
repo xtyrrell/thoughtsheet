@@ -1,0 +1,31 @@
+version: "3.4"
+
+services:
+  api:
+    image: api
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+      MONGO_URL: mongodb://db
+      SECRET: abcdefg
+      PORT: 5000
+    ports:
+      - 5000:5000
+    networks:
+      - app-network
+  db:
+    image: mongo
+    volumes:
+      - dbdata:/data/db
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  dbdata:
+  node_modules:
