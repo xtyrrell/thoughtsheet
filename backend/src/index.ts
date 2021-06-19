@@ -19,7 +19,7 @@ async function main() {
       useFindAndModify: false,
     });
   } catch {
-    console.error(`Mongoose could not connect to MongoDB server. Exiting.`);
+    console.error("Mongoose could not connect to MongoDB server. Exiting.");
     process.exit(1);
   }
 

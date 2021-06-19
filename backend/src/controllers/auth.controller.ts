@@ -53,7 +53,7 @@ routes.post("/request-code", async (req: Request, res: Response) => {
 
   return res.send({
     phoneNumber,
-    message: `Code successfully sent.`,
+    message: "Code successfully sent.",
   });
 });
 
@@ -75,8 +75,9 @@ routes.post("/submit-code", async (req: Request, res: Response) => {
 
   const user = await User.findOne({ phoneNumber });
 
-  if (!user)
+  if (user == null) {
     throw new NotFoundError("A user with this phone number was not found.");
+  }
 
   const expectedOtp = codes[user._id] || "";
 
@@ -120,7 +121,7 @@ routes.post("/token/login", async (req: Request, res: Response) => {
   const user = await User.findOne({ email });
 
   // If this user doesn't have an account yet,
-  if (!user) {
+  if (user == null) {
     console.log("about to create a new user " + email);
 
     // create their account
@@ -183,7 +184,7 @@ routes.post("/cookie/login", async (req: Request, res: Response) => {
   const user = await User.findOne({ email });
 
   // If this user doesn't have an account yet,
-  if (!user) {
+  if (user == null) {
     console.log("about to create a new user " + email);
 
     // create their account

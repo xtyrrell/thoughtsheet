@@ -23,7 +23,7 @@ describe("OTP codes", () => {
     expect(userBeforeRequest).toBeNull();
 
     const response = await request(app)
-      .post(API_PATH + `/auth/request-code`)
+      .post(API_PATH + "/auth/request-code")
       .send({ phoneNumber });
 
     expect(response.status).toBe(200);

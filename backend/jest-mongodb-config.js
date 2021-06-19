@@ -8,9 +8,9 @@ module.exports = {
     },
     autoStart: false,
     instance: {
-      dbName: "test"
+      dbName: 'test'
     }
     // Or leave instance blank to have dbs be dynamic, like so
     // instance: {}
   }
-};
+}
