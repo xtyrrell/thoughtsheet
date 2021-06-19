@@ -9,8 +9,6 @@
     "dev": "ts-node-dev --respawn src/index.ts",
     "build": "npx tsc",
     "start": "node ./build/index.js",
-    "lint": "ts-standard",
-    "lint:fix": "ts-standard --fix",
     "start-local-db": "echo 'You must have installed `docker` and be in the `docker` group' && docker run -d --network=host --name mongo mongo"
   },
   "keywords": [
@@ -51,7 +49,6 @@
     "supertest": "^6.1.3",
     "ts-jest": "^26.5.5",
     "ts-node-dev": "^1.1.6",
-    "ts-standard": "^10.0.0",
     "typescript": "^4.2.4"
   },
   "engines": {
