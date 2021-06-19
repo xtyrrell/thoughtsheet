@@ -25,7 +25,8 @@ const Login: React.FC = () => {
   return (
     <IonPage>
       <IonContent className="ion-padding">
-        <h1 className="ion-margin-bottom">Login</h1>
+        <h1 className="ion-margin-bottom">Hello there!</h1>
+        <p>Please enter your email and password</p>
         <form onSubmit={handleSubmit}>
           <IonItem>
             <IonLabel position="floating">Email or phone number</IonLabel>

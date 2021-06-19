@@ -21,17 +21,16 @@ interface LoginDetails {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export const AuthProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
-  const [userToken] = useStorageItem("userToken");
-
-  console.log(`AuthProvider: userToken`, userToken);
-
-  // If the token already exists, assume we are logged in
-  const isAuthenticated = !!userToken;
+  // TODO: Store a boolean, "isAuthenticated", which is false on app download
+  // but is set to true the first time someone logs in. It stays true until
+  // an API call returns a "Not Authenticated" error, which triggers it to
+  // flip back to false.
+  // const [isAuthenticated] = useStorageItem("isAuthenticated");
+  const isAuthenticated = true;
 
   console.log(`AuthProvider: isAuthenticated`, isAuthenticated);
 
   const login = async ({ email, password }: LoginDetails) => {
-    // fetch()
     console.log(
       `login: Logging in with email: ${email} and password: ${password}`
     );
