@@ -26,7 +26,7 @@ async function main() {
   // Start the express server
   app.listen(PORT, () => {
     console.log(
-      `Connection to MongoDB successfull. Now listening on port ${PORT}.`
+      `Connection to MongoDB successful. Now listening on port ${PORT}.`
     );
   });
 }
