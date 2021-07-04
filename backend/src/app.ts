@@ -1,8 +1,11 @@
 import express from "express";
 import cors from "cors";
 import router from "./router";
+import morgan from "morgan";
 
 const app = express();
+
+app.use(morgan("combined") as any);
 
 // app.use(cors({ origin: /localhost(?:\:[0-9]{1,4})?$/i, credentials: true }));
 // app.use(cors({ credentials: true }));
