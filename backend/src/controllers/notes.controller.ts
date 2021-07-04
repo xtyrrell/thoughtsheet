@@ -8,7 +8,10 @@ const routes = Router();
 const myNotes = (userId: mongoose.Types.ObjectId) => Note.find({ userId });
 
 routes.post("/", async (req: any, res) => {
-  const noteData = { ...req.body, userId: req.user._id };
+  // TODO: Add authentication and get req.user from the actual request
+  // const noteData = { ...req.body, userId: req.user._id };
+  const noteData = { ...req.body };
+
   console.log("Creating new note: ", noteData);
   res.send(await Note.create(noteData));
 });
@@ -31,7 +34,9 @@ routes.get("/:noteId", async (req: any, res) => {
   let note: INote | null;
 
   try {
-    note = await myNotes(req.user._id).findOne({ _id: req.params.noteId });
+    // TODO:AUTH
+    // note = await myNotes(req.user._id).findOne({ _id: req.params.noteId });
+    note = await Note.findById(req.params.noteId);
   } catch (err) {
     throw new NotFoundError();
   }

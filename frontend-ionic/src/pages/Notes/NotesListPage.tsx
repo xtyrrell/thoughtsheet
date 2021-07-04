@@ -17,11 +17,18 @@ import {
   IonButtons,
   IonBackButton,
   IonSpinner,
+  IonFab,
+  IonFabButton,
+  IonIcon,
 } from "@ionic/react";
+import { add } from "ionicons/icons";
 
 function useNotes() {
   return useQuery("notes", async () => {
-    const { data } = await axios.get("http://localhost:5000/notes");
+    const { data } = await axios.get(
+      // "https://backend-api-m55qthxfka-ew.a.run.app/notes"
+      "http://localhost:5000/notes"
+    );
     return data;
   });
 }
@@ -39,8 +46,17 @@ const NotesListPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
+        <IonFab
+          vertical="bottom"
+          horizontal="end"
+          slot="fixed"
+          onClick={(e) => console.log("Clicked!")}
+        >
+          <IonFabButton>
+            <IonIcon icon={add} />
+          </IonFabButton>
+        </IonFab>
         <IonList>
-          {/* TODO: Add loader when notes are loading */}
           {status === "loading" ? (
             <IonSpinner />
           ) : status === "error" ? (

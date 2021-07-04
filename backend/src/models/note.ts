@@ -13,7 +13,8 @@ const noteSchema: Schema = new Schema(
     userId: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      // TODO:AUTH uncomment when we add auth
+      // required: true,
     },
     title: {
       type: String,
