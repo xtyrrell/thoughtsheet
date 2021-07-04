@@ -1,0 +1,18 @@
+# Stage 1: Compile typescript source code to dist/
+FROM node:16.3-alpine AS typescript-compiler
+
+WORKDIR /usr/src/app
+
+COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
+
+# We want to install everything, including dev dependencies, because
+# our build command runs `tsc` which is a dev dependency.
+RUN npm ci --include=dev --silent
+
+COPY . .
+
+RUN ls -lah
+
+EXPOSE 5000
+
+CMD npm run docker-dev

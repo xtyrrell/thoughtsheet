@@ -4,11 +4,17 @@ The Node.js Express backend for Thoughtsheet: simple cloud-synced multiplatform 
 
 It uses Express and MongoDB with Mongoose, and is written in TypeScript.
 
+## New Local Development Docker Setup
+
+I'm trying to get a `docker-compose` setup where you can get the whole backend running with just `docker-compose up` in this directory. It seems to work but I think you might have to manually install the dependencies (run `npm i`).
+
 ## Getting started
 
 To get the backend server up and running locally follow these steps.
 
 ### Prerequisites
+
+* I'm working on a docker-compose setup where you just need Docker and can just run `docker-compose up`.
 
 * You'll need a recent version of **Node.js** installed (the exact version is in `.tool-versions`). I recommend using [asdf](https://asdf-vm.com/#/core-manage-asdf) to easily install and manage multiple versions, but any installation method should work.
 * You can install **Docker** if you'd like to run a local MongoDB without installing: [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/). You will want to add yourself to the `docker` group so `docker` commands don't require `sudo`, see the [postinstall steps](https://docs.docker.com/engine/install/linux-postinstall/). Then you can set the `MONGO_URL` environment variable in your `.env` file to your local MongoDB connection string URL to use as your development database.

@@ -1,22 +1,29 @@
-version: "3.4"
+# A docker-compose for running the server in development
+version: "3.9"
 
 services:
-  api:
-    image: api
+  thoughtsheet-backend-api:
+    image: thoughtsheet-backend-api
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: Dockerfile.dev
+    # This is for development, but for production, these environment
+    # variables are set in the cloud provider config
     environment:
       NODE_ENV: production
-      MONGO_URL: mongodb://db
+      MONGO_URL: mongodb://thoughtsheet-db
       SECRET: abcdefg
       PORT: 5000
     ports:
       - 5000:5000
+    volumes:
+      - .:/usr/src/app # same as WORKDIR in your Dockerfile
     networks:
       - app-network
-  db:
+  thoughtsheet-db:
     image: mongo
+    logging:
+      driver: none
     volumes:
       - dbdata:/data/db
     networks:
@@ -28,4 +35,7 @@ networks:
 
 volumes:
   dbdata:
+    # Max: For some reason, if we uncomment the following line, the backend
+    # can't find the installed dependencies when run through docker-compose.
+    # Not sure how that works.
   node_modules:
