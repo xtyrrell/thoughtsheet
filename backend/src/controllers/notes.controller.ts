@@ -72,7 +72,9 @@ routes.patch("/:noteId", async (req: any, res) => {
     // TODO(xtyrrell): v0: don't allow users to transfer notes to other users by setting userId in
     // req.body
     // note = await myNotes(req.user._id).findOneAndUpdate(
-    note = await Note.findOneAndUpdate({ _id: req.params.noteId }, req.body);
+    note = await Note.findOneAndUpdate({ _id: req.params.noteId }, req.body, {
+      new: true,
+    });
   } catch (err) {
     throw err;
     // throw new NotFoundError()
