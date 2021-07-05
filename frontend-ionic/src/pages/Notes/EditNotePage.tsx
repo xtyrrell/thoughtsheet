@@ -9,55 +9,40 @@ import {
   IonSpinner,
   IonInput,
 } from "@ionic/react";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, useLocation } from "react-router-dom";
+
+// TODO: Switch this to useDebounce from `rooks`
 import { useDebounce } from "use-debounce";
+
 import NoteEditor from "../../components/NoteEditor/NoteEditor";
+import { getNoteById, updateNote, createNote } from "../../client/notes-client";
+import { INote } from "../../client/interfaces";
 
-// TODO: Factor this out into a types file (ideally shared between frontend and backed)
-interface INote {
-  _id: string;
-  title: string;
-  body: string;
-}
-
-const getNoteById = async (id) => {
-  const { data } = await axios.get(
-    // `https://backend-api-m55qthxfka-ew.a.run.app/notes/${id}`
-    `http://localhost:5000/notes/${id}`
-  );
-  return data;
-};
-
-function useNote(noteId) {
+function useNote(noteId, enabled = false) {
   const queryClient = useQueryClient();
-  // queryClient.invalidateQueries();
 
-  // TODO: Implement note creation
-  // if noteId is "new" we should save a new note
-  if (noteId === "new") {
-    console.log("useNote: noteId is 'new'!!");
-    // return useMutation()
-  }
-
-  return useQuery(["notes", noteId], () => getNoteById(noteId), {
+  return useQuery<INote>(["note", noteId], () => getNoteById(noteId), {
+    enabled, // TODO: REMOVE THIS AFTER DOING NOTE CREATION
     placeholderData: () =>
       (queryClient.getQueryData("notes") as INote[])?.find(
         (n) => n._id === noteId
-      ),
+      ) ?? { _id: noteId, title: "", body: "" },
   });
 }
 
 const EditNotePage: React.FC<RouteComponentProps> = ({ match }) => {
-  // console.log("EditNotePage: match", match);
-
   const noteId = (match.params as any).noteId;
+
+  const location = useLocation();
+  const isNew = new URLSearchParams(location.search).get("new") != null;
+
+  console.log("isNew", isNew);
 
   // If noteId is passed:
   // grab the note from the server, display it, and setup autosave
-  const { status, data: note, error, isFetching } = useNote(noteId);
+  const { status, data: note, error, isFetching } = useNote(noteId, !isNew);
   // else
   // Make a new note client-side, and setup autosave once it's been saved for the first time
 
@@ -66,7 +51,7 @@ const EditNotePage: React.FC<RouteComponentProps> = ({ match }) => {
   const [debouncedNoteBody] = useDebounce<string>(noteBody, 500);
   const [debouncedNoteTitle] = useDebounce<string>(noteTitle, 500);
 
-  const saveNoteMutation = useMutateNote(noteId);
+  const updateNoteMutation = useUpdateNote(noteId);
 
   const [noteIsModified, setNoteIsModified] = useState(false);
 
@@ -80,7 +65,7 @@ const EditNotePage: React.FC<RouteComponentProps> = ({ match }) => {
     console.log("saving latest version of noteTitle", noteTitle);
 
     // save note to db
-    saveNoteMutation.mutate({
+    updateNoteMutation.mutate({
       title: noteTitle,
       body: noteBody,
     });
@@ -98,8 +83,6 @@ const EditNotePage: React.FC<RouteComponentProps> = ({ match }) => {
     setNoteTitle(note?.title || "");
   }, [note]);
 
-  // TODO: Add debounced saving of note when it's edited
-
   return (
     <IonPage>
       <IonHeader color="primary">
@@ -115,7 +98,7 @@ const EditNotePage: React.FC<RouteComponentProps> = ({ match }) => {
                 setNoteIsModified(true);
                 setNoteTitle(e.detail.value!);
               }}
-            ></IonInput>
+            />
           </IonTitle>
         </IonToolbar>
       </IonHeader>
@@ -151,32 +134,50 @@ const NetworkStatusBar: React.FC<{ status: string; isFetching: boolean }> = ({
 
 // ====
 
-const updateNote = (noteId) => (note: Partial<INote>) => {
-  console.log(`updateNote(${noteId}) with note`, note);
-  return axios.patch(
-    // `https://backend-api-m55qthxfka-ew.a.run.app/notes/${noteId}`,
-    `http://localhost:5000/notes/${noteId}`,
-    note
-  );
+const useCreateNote = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(createNote, {
+    // Notice the second argument is the variables object that the `mutate` function receives
+
+    onSuccess: (data, variables) => {
+      const newNote = data.data;
+
+      const oldNotes = queryClient.getQueryData("notes") as INote[];
+
+      // console.log("updates 'notes' cache to ", notesWithUpdatedNote);
+
+      if (oldNotes != null) {
+        queryClient.setQueryData("notes", [...oldNotes, newNote]);
+      }
+    },
+  });
 };
 
-const useMutateNote = (noteId) => {
+const useUpdateNote = (noteId) => {
   const queryClient = useQueryClient();
 
   return useMutation(updateNote(noteId), {
     // Notice the second argument is the variables object that the `mutate` function receives
 
     onSuccess: (data, variables) => {
-      const newNote = data.data as INote;
+      const note = data.data as INote;
 
-      // console.log("setting in cache at ['notes', ", noteId, "] = ", newNote);
-      queryClient.setQueryData(["notes", noteId], newNote);
+      // console.log("setting in cache at ['note', ", noteId, "] = ", newNote);
+      queryClient.setQueryData(["note", noteId], note);
 
       const oldNotes = queryClient.getQueryData("notes") as INote[];
-      const notesWithUpdatedNote = oldNotes?.map((n) => {
+
+      const isNoteNew = !oldNotes?.find((n) => n._id === note._id);
+
+      let notesWithUpdatedNote = oldNotes?.map((n) => {
         if (n._id !== noteId) return n;
-        else return newNote;
+        else return note;
       });
+
+      if (oldNotes && isNoteNew) {
+        notesWithUpdatedNote = [note, ...notesWithUpdatedNote];
+      }
 
       // console.log("updates 'notes' cache to ", notesWithUpdatedNote);
 

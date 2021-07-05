@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 
 import axios from "axios";
 import {
@@ -23,6 +23,9 @@ import {
 } from "@ionic/react";
 import { add } from "ionicons/icons";
 
+import { ObjectId } from "../../utils/object-id";
+import { RouteComponentProps } from "react-router";
+
 function useNotes() {
   return useQuery("notes", async () => {
     const { data } = await axios.get(
@@ -33,8 +36,24 @@ function useNotes() {
   });
 }
 
-const NotesListPage: React.FC = () => {
+const NotesListPage: React.FC<RouteComponentProps> = ({ history }) => {
   const { status, data: notes, error, isFetching } = useNotes();
+
+  const queryClient = useQueryClient();
+
+  const handleNewNoteButtonClick = (e) => {
+    const newNoteId = ObjectId();
+
+    queryClient.setQueryData(["note", newNoteId], {
+      _id: newNoteId,
+      title: "",
+      body: "",
+    });
+
+    queryClient.resetQueries("notes", { exact: true });
+
+    history.push(`/notes/${newNoteId}?new`);
+  };
 
   return (
     <IonPage>
@@ -44,14 +63,8 @@ const NotesListPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonFab
-          vertical="bottom"
-          horizontal="end"
-          slot="fixed"
-          // TODO: Implementing note creation
-          onClick={(e) => console.log("Clicked!")}
-        >
-          <IonFabButton>
+        <IonFab vertical="bottom" horizontal="end" slot="fixed">
+          <IonFabButton onClick={handleNewNoteButtonClick}>
             <IonIcon icon={add} />
           </IonFabButton>
         </IonFab>

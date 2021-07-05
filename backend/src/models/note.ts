@@ -18,11 +18,10 @@ const noteSchema: Schema = new Schema(
     },
     title: {
       type: String,
-      required: true,
+      default: "",
     },
     body: {
       type: String,
-      required: true,
       default: "",
     },
     tags: [String],

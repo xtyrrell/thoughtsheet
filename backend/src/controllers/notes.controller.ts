@@ -19,7 +19,7 @@ routes.post("/", async (req: any, res) => {
 routes.get("/", async (req: any, res) => {
   // TODO: Add auth
   // return res.send(await myNotes(req.user._id).exec());
-  return res.send(await Note.find());
+  return res.send(await Note.find({}).sort({ createdAt: -1 }).exec());
 });
 
 // TODO(xtyrrell): v0: remove
@@ -64,20 +64,37 @@ routes.delete("/:noteId", async (req: any, res) => {
 routes.patch("/:noteId", async (req: any, res) => {
   let note: INote | null;
 
-  console.log("the note about to be updated:");
-  // console.log(await myNotes(req.user._id).find({ _id: req.params.noteId }));
-  console.log(await Note.find({ _id: req.params.noteId }));
+  console.log("updated");
 
   try {
+    console.log("the note about to be updated:");
+    // console.log(await myNotes(req.user._id).find({ _id: req.params.noteId }));
+    console.log(await Note.find({ _id: req.params.noteId }));
+
     // TODO(xtyrrell): v0: don't allow users to transfer notes to other users by setting userId in
     // req.body
     // note = await myNotes(req.user._id).findOneAndUpdate(
     note = await Note.findOneAndUpdate({ _id: req.params.noteId }, req.body, {
       new: true,
     });
+
+    // This is a bit gross: we're creating a note with this ID if it doesn't exist
+    // This is so that the frontend can choose the ID for new notes, avoiding the user
+    // having to wait for a network call before being able to edit the new note they want to make
+    if (note == null) {
+      // TODO: Add authentication and get req.user from the actual request
+      // const noteData = { ...req.body, req.params.noteId, userId: req.user._id };
+      const noteData = { ...req.body, _id: req.params.noteId };
+
+      console.log("Creating new note: ", noteData);
+      note = await Note.create(noteData);
+      console.log("Createdddddd new note: ", note);
+    }
   } catch (err) {
-    throw err;
+    console.log("not throwing err");
+    // throw err;
     // throw new NotFoundError()
+    note = null;
   }
 
   if (note == null) throw new NotFoundError();
