@@ -36,8 +36,6 @@ function useNotes() {
 const NotesListPage: React.FC = () => {
   const { status, data: notes, error, isFetching } = useNotes();
 
-  console.log("NotesListPage: useNotes status", status);
-
   return (
     <IonPage>
       <IonHeader color="primary">
@@ -50,6 +48,7 @@ const NotesListPage: React.FC = () => {
           vertical="bottom"
           horizontal="end"
           slot="fixed"
+          // TODO: Implementing note creation
           onClick={(e) => console.log("Clicked!")}
         >
           <IonFabButton>
@@ -69,6 +68,7 @@ const NotesListPage: React.FC = () => {
                 </IonItem>
                 <IonItemOptions side="end">
                   <IonItemOption
+                    // TODO: Implement note deletion
                     onClick={() => alert("Do you want to delete this?")}
                   >
                     Delete
